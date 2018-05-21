@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+    <!-- begin head -->
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="index" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="Sighill">
+        <link rel="favicon" href="/static/main/favicon.ico">
+        <title>SonoV</title>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="/static/main/css/bootstrap.min.css">
+        <!-- Custom styles for the whole website -->
+        <link rel="stylesheet" href="/static/main/css/custom.css">
+        <!-- Feather glyphicons -->
+        <link rel="stylesheet" href="/static/main/css/feather.css">
+        <!-- player style -->
+        <link rel="stylesheet" href="/static/main/css/player.css">
+        <!-- colorbox style -->
+        <link rel="stylesheet" href="/static/main/css/colorbox.css" />
+
+    </head>
+    <!-- end head -->
+    <!-- Begin body -->
+    <body>
+
+    {% include 'main/navbar.html' %}
+
+    <main role="main" class="col-md-9 m-sm-auto col-lg-10 p-1 text-center">
+    {% block content %}
+    {% endblock %}
+    </main>
+
+    </body>
+    <!-- end body -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/main/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/main/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/static/main/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- feather js -->
+    <script src="/static/main/js/feather.js"></script>
+    <script src="/static/main/js/player.js"></script>
+    <script>
+      feather.replace()
+    </script>
+    <script src="/static/main/js/colorbox.js"></script>
+    <script>
+        $(document).ready(function(){
+            //Examples of how to assign the Colorbox event to elements
+            $(".youtube").colorbox({rel:'son', iframe:false, innerWidth:900, innerHeight:580});
+            $(".soundcloud").colorbox({rel:'son', iframe:false, innerWidth:900, innerHeight:580});
+            $(".vimeo").colorbox({rel:'son', iframe:false, innerWidth:900, innerHeight:520});
+        });
+    </script>
+</html>

@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<h1 class="text-muted">Tous les super clips</h1>
+<div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
+
+        {% if clips_to_display.has_previous %}
+        <a type="button"  class="btn btn-dark" href="?page={{ clips_to_display.previous_page_number }}"><span data-feather="chevrons-left"></span></a>
+        {% else %}
+        <span class="btn btn-dark disabled"><span data-feather="chevrons-left"></span></span>
+        {% endif %}
+        <span type="button" class="btn btn-dark">{{ clips_to_display.number }}/{{ clips_to_display.paginator.num_pages }}</span>
+        {% if clips_to_display.has_next %}
+        <a class="btn btn-dark" href="?page={{ clips_to_display.next_page_number }}"><span data-feather="chevrons-right"></span></a>
+        {% else %}
+        <span class="btn btn-dark disabled"><span data-feather="chevrons-right"></span></span>
+        {% endif %}
+
+</div>
+<div class="row d-flex justify-content-around">
+
+    {% for clip in clips_to_display %}
+    <div class="m-3 section_item">
+
+        <a class="{{clip.source_site}}" href="{{clip.colorbox_link}}" title="{{clip.short_desc}}">
+            <div class="img-thumbnail-container">
+                
+                <img class="rounded-circle img-thumbnail box-shadow" src="{{clip.thumbnail}}">
+
+            </div>
+            <div class="caption">
+
+                <h1 class="text-white text-shadow">Ecouter</h1>
+
+            </div>
+            <h4 class="text-center text-white text-shadow pt-2"  style="max-width: 250px;">{{clip.title}}</h4>
+        
+        </a>
+        <div class="sidebar-heading text-muted">
+
+            {{clip.created_date.day}}-{{clip.created_date.month}}-{{clip.created_date.year}} par {{clip.posted_by}}
+        </div>
+        {% for tag in clip.tags.all %}
+        <a href="/playlist/{{tag.title}}">
+
+            <span class="sidebar-heading tag">{{tag.title}}</span>
+
+        </a>
+        {% endfor%}
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

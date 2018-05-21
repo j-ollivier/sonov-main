@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="text-muted">{{page_title}}</h1>
+    <div class="mediatec-cleanaudioplayer">
+
+        <ul data-theme="dark">
+
+            {% for son in playlist_content %}
+            <div>
+
+                <li data-title="{{son.title}}" data-type="mp3" data-url="/{{son.audio_file}}"></li>
+
+            </div>
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<h1 class="text-muted">Les derniers sons de Sonov</h1>
+<div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
+
+        {% if sons_to_display.has_previous %}
+        <a type="button"  class="btn btn-dark" href="?page={{ sons_to_display.previous_page_number }}"><span data-feather="chevrons-left"></span></a>
+        {% else %}
+        <span class="btn btn-dark disabled"><span data-feather="chevrons-left"></span></span>
+        {% endif %}
+        <span type="button" class="btn btn-dark">{{ sons_to_display.number }}/{{ sons_to_display.paginator.num_pages }}</span>
+        {% if sons_to_display.has_next %}
+        <a class="btn btn-dark" href="?page={{ sons_to_display.next_page_number }}"><span data-feather="chevrons-right"></span></a>
+        {% else %}
+        <span class="btn btn-dark disabled"><span data-feather="chevrons-right"></span></span>
+        {% endif %}
+
+</div>
+<div class="row d-flex justify-content-around mt-2">
+
+    {% for son in sons_to_display %}
+    <div class="m-3 section_item">
+
+        <a class="{{son.source_site}}" href="{{son.colorbox_link}}" title="{% if son.short_desc %}{{son.short_desc}}{% else %}{% endif %}">
+            <div class="img-thumbnail-container">
+                
+                <img class="rounded-circle img-thumbnail box-shadow" src="{{son.thumbnail}}">
+
+            </div>
+            <div class="caption">
+
+                <h1 class="text-white text-shadow">Ecouter</h1>
+
+            </div>
+            <h4 class="text-center text-white text-shadow pt-2"  style="max-width: 250px;">{{son.title}}</h4>
+        
+        </a>
+        <div class="sidebar-heading text-muted">
+
+            {{son.created_date | date:'d M Y'}} par {{son.posted_by}}
+        </div>
+        {% for tag in son.tags.all %}
+        <a href="/playlist/{{tag.title}}">
+
+            <span class="tag">{{tag.title}}</span>
+
+        </a>
+        {% endfor%}
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
