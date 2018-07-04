@@ -4,15 +4,15 @@
 
 <h1 class="text-muted">Les derniers sons de Sonov</h1>
 <div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
-
+        
         {% if sons_to_display.has_previous %}
         <a type="button"  class="btn btn-dark" href="?page={{ sons_to_display.previous_page_number }}"><span data-feather="chevrons-left"></span></a>
         {% else %}
-        <span class="btn btn-dark disabled"><span data-feather="chevrons-left"></span></span>
+        <span class="btn btn-dark disabled"> < </span>
         {% endif %}
         <span type="button" class="btn btn-dark">{{ sons_to_display.number }}/{{ sons_to_display.paginator.num_pages }}</span>
         {% if sons_to_display.has_next %}
-        <a class="btn btn-dark" href="?page={{ sons_to_display.next_page_number }}"><span data-feather="chevrons-right"></span></a>
+        <a class="btn btn-dark" href="?page={{ sons_to_display.next_page_number }}"> > </a>
         {% else %}
         <span class="btn btn-dark disabled"><span data-feather="chevrons-right"></span></span>
         {% endif %}
@@ -48,6 +48,7 @@
 
         </a>
         {% endfor%}
+        {% if request.user.is_staff %}<a href="https://www.sonov.fr/admin/main/son/{{son.uid}}/change/"><span class="tag">admin</span></a>{% endif %}
 
     </div>
     {% endfor %}

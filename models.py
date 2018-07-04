@@ -29,7 +29,7 @@ class Son(models.Model):
     source_id_string = models.CharField(
         max_length = 100)
     thumbnail = models.ImageField(
-        upload_to = 'static/main/thumbnail')
+        upload_to = 'static/main/img')
     audio_file = models.FileField(
         upload_to = 'static/main/audio',
         null = True,
@@ -75,6 +75,8 @@ class Tag(models.Model):
     '''
         Each Son has tags, which are used to compile playlists
     '''
+    class Meta:
+        ordering = ['title']
     uid = models.AutoField(
         primary_key = True,
         db_index = True)

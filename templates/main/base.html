@@ -8,18 +8,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="Sighill">
-        <link rel="favicon" href="/static/main/favicon.ico">
+        <link rel="favicon" href="static/main/favicon.ico">
         <title>SonoV</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="/static/main/css/bootstrap.min.css">
         <!-- Custom styles for the whole website -->
         <link rel="stylesheet" href="/static/main/css/custom.css">
-        <!-- Feather glyphicons -->
-        <link rel="stylesheet" href="/static/main/css/feather.css">
+        {% if player_enabled %}
         <!-- player style -->
         <link rel="stylesheet" href="/static/main/css/player.css">
+        {% endif %}
+        {% if colorbox_enabled %}
         <!-- colorbox style -->
         <link rel="stylesheet" href="/static/main/css/colorbox.css" />
+        {% endif %}
 
     </head>
     <!-- end head -->
@@ -43,12 +45,10 @@
     <script src="/static/main/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/static/main/js/ie10-viewport-bug-workaround.js"></script>
-    <!-- feather js -->
-    <script src="/static/main/js/feather.js"></script>
+    {% if player_enabled %}
     <script src="/static/main/js/player.js"></script>
-    <script>
-      feather.replace()
-    </script>
+    {% endif %}
+    {% if colorbox_enabled %}
     <script src="/static/main/js/colorbox.js"></script>
     <script>
         $(document).ready(function(){
@@ -58,4 +58,5 @@
             $(".vimeo").colorbox({rel:'son', iframe:false, innerWidth:900, innerHeight:520});
         });
     </script>
+    {% endif %}
 </html>

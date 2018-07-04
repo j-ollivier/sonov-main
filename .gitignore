@@ -12,3 +12,7 @@ local_settings.py
 
 .env
 db.sqlite3
+
+*.mp3
+*.png
+*.jpg

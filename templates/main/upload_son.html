@@ -2,12 +2,19 @@
 
 {% block content %}
 <div class="container bg-light">
+    <style>
+        input,select{
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+        }
+    </style>
 
-    {% for key, value in errors.items %}
-
-        <p>{{key}} : {{value}}</p>
-        
-    {% endfor %}
+    <h1>
+        Nouveau son
+    </h1>
+    <p class="alert alert-info">Désolé pour l'instant il faut créer le son puis aller dans l'interface d'admin pour rajouter les tags ! Bouuuh je sais</p>
+    <p class="alert alert-info">Après avoir envoyé le formulaire, ça va ramer un peu le temps que le mp3 soit téléchargé sur le serveur. C'est donc normal que ça prenne quelques secondes.</p>
 
     <form action="/upload" method="post" enctype="multipart/form-data">
 
