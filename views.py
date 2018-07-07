@@ -132,6 +132,11 @@ def UploadSon(request):
                 new_son.short_desc = form.cleaned_data['short_desc']
                 new_son.posted_by = form.cleaned_data['posted_by']
                 new_son.save()
+                if form.cleaned_data['tags']:
+                    for tag in form.cleaned_data['tags']:
+                        new_son.tags.add(tag)
+                else:
+                    pass
                 # we DL the mp3
                 if new_son.source_site == "youtube":
                     chdir('/home/common/sonov_django/static/main/audio')
