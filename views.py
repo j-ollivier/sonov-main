@@ -10,6 +10,8 @@ from subprocess import call
 from django.shortcuts import redirect
 import youtube_dl
 from os import chdir
+import re
+from .scripts import GetNextPostTime
 
 #####################################################################
 def FrontPage(request):
@@ -127,8 +129,8 @@ def UploadSon(request):
                 # we rename the file as its source_id_string
                 new_son.audio_file = 'static/main/audio/{}-{}.mp3'.format(
                     form.cleaned_data['title'], form.cleaned_data['source_id_string'])
-                new_son.is_visible = form.cleaned_data['is_visible']
-                new_son.created_date = form.cleaned_data['created_date']
+                new_son.is_visible = False
+                new_son.created_date = GetNextPostTime()
                 new_son.short_desc = form.cleaned_data['short_desc']
                 new_son.posted_by = form.cleaned_data['posted_by']
                 new_son.save()

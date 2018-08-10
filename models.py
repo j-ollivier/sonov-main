@@ -20,17 +20,23 @@ class Son(models.Model):
         primary_key = True , 
         db_index = True)
     title = models.CharField(
+        'Titre complet',
         max_length = 255)
     source_site = models.CharField(
+        'Plateforme source',
         max_length = 50, 
         choices = video_source_choices)
     source_url = models.CharField(
+        'URL complète du son',
         max_length = 200)
     source_id_string = models.CharField(
+        'Caractères uniques du son',
         max_length = 100)
     thumbnail = models.ImageField(
+        'Image d\'aperçu',
         upload_to = 'static/main/img')
     audio_file = models.FileField(
+        'Fichier son',
         upload_to = 'static/main/audio',
         null = True,
         blank = True)
@@ -39,12 +45,15 @@ class Son(models.Model):
         related_name = 'video_tags', 
         blank = True)
     is_visible = models.BooleanField(
+        'Visible dès maintenant?',
         default = False)
-    created_date = models.DateTimeField(
+    created_date = models.DateField(
+        'A quelle date le rendre visible',
         default = timezone.now)
     modified_date = models.DateTimeField(
         auto_now = True)
     short_desc = models.CharField(
+        'Un petit mot facultatif',
         max_length = 72, 
         blank = True, 
         null = True)
