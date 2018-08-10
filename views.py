@@ -20,9 +20,15 @@ def FrontPage(request):
         looks up titles, tags, article texts.
     '''
     all_tags = Tag.objects.all().order_by('title')
-    last_sons = [i for i in Son.objects.select_related(
-        ).filter(is_visible=True).order_by(
-        'created_date').reverse()]
+    # registered users get to see all sons before they're posted
+    if request.user.is_authenticated:
+        last_sons = [i for i in Son.objects.select_related(
+            ).all().order_by(
+            'created_date').reverse()]
+    else:
+        last_sons = [i for i in Son.objects.select_related(
+            ).filter(is_visible=True).order_by(
+            'created_date').reverse()]
     paginator = Paginator(last_sons, 12)
     page = request.GET.get('page')
     sons_to_display = paginator.get_page(page)

@@ -49,6 +49,7 @@
         </a>
         {% endfor%}
         {% if request.user.is_staff %}<a href="https://www.sonov.fr/admin/main/son/{{son.uid}}/change/"><span class="tag">admin</span></a>{% endif %}
+        {% if not son.is_visible %}<div class="text-white">Invisible</div>{% endif %}
 
     </div>
     {% endfor %}
