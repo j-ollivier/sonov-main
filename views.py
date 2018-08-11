@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 import youtube_dl
 from os import chdir
 import re
-from .scripts import GetNextPostTime
+from .scripts import GetNextPostTime, GetYoutubeID
 
 #####################################################################
 def FrontPage(request):
@@ -129,8 +129,8 @@ def UploadSon(request):
                 new_son.title = form.cleaned_data['title']
                 new_son.source_site = form.cleaned_data['source_site']
                 new_son.thumbnail = form.cleaned_data['thumbnail']
-                new_son.source_id_string = form.cleaned_data['source_id_string']
                 new_son.source_url = form.cleaned_data['source_url']
+                new_son.source_id_string = GetYoutubeID(form.cleaned_data['source_url'])
                 # after the audio is DLd from the source site
                 # we rename the file as its source_id_string
                 new_son.audio_file = 'static/main/audio/{}-{}.mp3'.format(
@@ -144,7 +144,7 @@ def UploadSon(request):
                     for tag in form.cleaned_data['tags']:
                         new_son.tags.add(tag)
                 else:
-                    pass
+                    return HttpResponseRedirect('/')
                 # we DL the mp3
                 if new_son.source_site == "youtube":
                     chdir('/home/common/sonov_django/static/main/audio')

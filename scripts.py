@@ -18,3 +18,15 @@ def ChangePostTime():
 	for son in sons : 
 		son.created_date.replace( hour = 00, minute = 00, second = 00 )
 		son.save()
+
+# source : https://gist.github.com/silentsokolov/f5981f314bc006c82a41
+def GetYoutubeID(youtube_url):
+	'''
+	Extract the youtube ID from the whole url.
+	'''
+	regex = re.compile(r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?(?P<id>[A-Za-z0-9\-=_]{11})')
+	match = regex.match(self.youtube_url)
+	if not match:
+		return False
+	else:
+		return match.group('id')
