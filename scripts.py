@@ -1,5 +1,6 @@
 from .models import Son
 from datetime import datetime, timedelta
+import re
 
 def GetNextPostTime():
 	'''
@@ -25,7 +26,7 @@ def GetYoutubeID(youtube_url):
 	Extract the youtube ID from the whole url.
 	'''
 	regex = re.compile(r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?(?P<id>[A-Za-z0-9\-=_]{11})')
-	match = regex.match(self.youtube_url)
+	match = regex.match(youtube_url)
 	if not match:
 		return False
 	else:

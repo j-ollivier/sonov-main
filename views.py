@@ -134,7 +134,7 @@ def UploadSon(request):
                 # after the audio is DLd from the source site
                 # we rename the file as its source_id_string
                 new_son.audio_file = 'static/main/audio/{}-{}.mp3'.format(
-                    form.cleaned_data['title'], form.cleaned_data['source_id_string'])
+                    new_son.title, new_son.source_id_string)
                 new_son.is_visible = False
                 new_son.created_date = GetNextPostTime()
                 new_son.short_desc = form.cleaned_data['short_desc']
