@@ -8,6 +8,8 @@ class Son(models.Model):
     '''
         Defines the informations about a video displayed on the site.
     '''
+    class Meta:
+        ordering = [ '-created_date' ]
     # choice vars 
     video_source_choices = (
         ('youtube', 'youtube'),
