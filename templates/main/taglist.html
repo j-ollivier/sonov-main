@@ -23,15 +23,20 @@
     {% for tag in tags_to_display %}
     <div class="m-3 section_item">
 
+
         <a href="/playlist/{{tag.title}}" title="{{tag.short_desc}}">
 
-            <img class="rounded-circle img-thumbnail box-shadow" src="{{tag.random_son.thumbnail}}">
-            <div class="caption">
-                <h1 class="text-white text-shadow">Ecouter</h1>
+            <div class="img-thumbnail-container">
+
+                <img class="rounded-circle img-thumbnail box-shadow" src="{{tag.random_son.thumbnail}}">
+                <div class="caption">
+                    <h1 class="text-white text-shadow">Ecouter</h1>
+                </div>
+                <h4 class="text-center text-white text-shadow pt-2"  style="max-width: 250px;">{{tag.title}}</h4>
+                <span class="text-white">{{tag.tag_son_count}} sons</span>
+            
             </div>
-            <h4 class="text-center text-white text-shadow pt-2"  style="max-width: 250px;">{{tag.title}}</h4>
-            <span class="text-white">{{tag.tag_son_count}} sons</span>
-        
+            
         </a>
 
     </div>

@@ -6,7 +6,7 @@
 <div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
         
         {% if sons_to_display.has_previous %}
-        <a type="button"  class="btn btn-dark" href="?page={{ sons_to_display.previous_page_number }}"><span data-feather="chevrons-left"></span></a>
+        <a type="button"  class="btn btn-dark" href="?page={{ sons_to_display.previous_page_number }}"> < </span></a>
         {% else %}
         <span class="btn btn-dark disabled"> < </span>
         {% endif %}
@@ -14,7 +14,7 @@
         {% if sons_to_display.has_next %}
         <a class="btn btn-dark" href="?page={{ sons_to_display.next_page_number }}"> > </a>
         {% else %}
-        <span class="btn btn-dark disabled"><span data-feather="chevrons-right"></span></span>
+        <span class="btn btn-dark disabled"> < </span></span>
         {% endif %}
 
 </div>
