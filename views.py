@@ -242,7 +242,7 @@ def UploadSonForBe(request):
                 new_son.posted_by = request.user
                 new_son.save()
                 if new_son.source_site == "youtube":
-                    chdir('/home/common/sonov_django/static/main/audio')
+                    chdir('/home/common/sonov_django/static/main/audioforbe')
                     ydl_opts = {
                         'outtmpl': '{}.mp3'.format(new_son.source_id_string),
                         'format': 'bestaudio/best',
