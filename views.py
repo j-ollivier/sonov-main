@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 import operator #for sorting objects from different tables in one aggregated list
-from .forms import UploadSonForm
+from .forms import UploadSonForm , UploadSonFormForBe
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -210,4 +210,69 @@ def VimeoIframe(request, vimeo_id):
         'vimeo_id': vimeo_id,
     }
     template = loader.get_template('main/vimeo_iframe.html')
+    return HttpResponse(template.render(context, request))
+
+#####################################################################
+def UploadSonForBe(request):
+    '''
+        Tool to upload a son and get the corresponding mp3
+    '''
+    if request.user.username.startswith('BE_'):
+        if request.method == 'GET':
+            context = {
+                'upload_son_form_for_be': UploadSonFormForBe(),
+                'player_enabled' : False,
+                'colorbox_enabled' : False,
+            }
+            template = loader.get_template('main/upload_son_for_be.html')
+            return HttpResponse(template.render(context, request))
+        elif request.method == "POST":
+            form = UploadSonFormForBe(request.POST)
+            if form.is_valid():
+                new_son = SonForBe()
+                new_son.title = form.cleaned_data['title']
+                new_son.source_site = 'youtube'
+                new_son.source_url = form.cleaned_data['source_url']
+                new_son.source_id_string = GetYoutubeID(form.cleaned_data['source_url'])
+                # after the audio is DLd from the source site
+                # we rename the file as its source_id_string
+                new_son.audio_file = 'static/main/audioforbe/{}.mp3'.format(
+                    new_son.source_id_string)
+                new_son.created_date = timezone.now()
+                new_son.posted_by = request.user
+                new_son.save()
+                if new_son.source_site == "youtube":
+                    chdir('/home/common/sonov_django/static/main/audio')
+                    ydl_opts = {
+                        'outtmpl': '{}.mp3'.format(new_son.source_id_string),
+                        'format': 'bestaudio/best',
+                        'postprocessors': [{
+                            'key': 'FFmpegExtractAudio',
+                            'preferredcodec': 'mp3',
+                            'preferredquality': '320',
+                        }],
+                    }
+                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                        ydl.download([form.cleaned_data['source_url'],])
+            else:
+                return HttpResponseRedirect('/')
+        else:
+            return HttpResponseRedirect('/')
+    else:
+        return HttpResponseRedirect('/')
+
+#####################################################################
+def PlaylistForBe(request):
+    '''
+     WIP FOR BE
+    '''
+    playlist_content = SonForBe.objects.filter( posted_by = request.user )
+    page_title = 'Playlist de {}'.format(request.user.username)
+    context={
+        'playlist_content': playlist_content,
+        'page_title': page_title,
+        'player_enabled' : True,
+        'colorbox_enabled' : False,
+    }
+    template = loader.get_template('main/playlist.html')
     return HttpResponse(template.render(context, request))

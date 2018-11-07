@@ -20,7 +20,7 @@ class Son(models.Model):
         primary_key = True , 
         db_index = True)
     title = models.CharField(
-        'Titre complet',
+        'Titre',
         max_length = 255)
     source_site = models.CharField(
         'Plateforme source',
@@ -104,3 +104,42 @@ class Tag(models.Model):
         return random_son
 
 
+#####################################################################
+class SonForBe(models.Model):
+    '''
+        Defines the informations about a video displayed on the site.
+    '''
+    # choice vars 
+    video_source_choices = (
+        ('youtube', 'youtube'),
+    )
+    # attributes
+    uid = models.AutoField(
+        primary_key = True , 
+        db_index = True)
+    title = models.CharField(
+        'Titre',
+        max_length = 255)
+    source_url = models.CharField(
+        'URL complète du son',
+        max_length = 200)
+    source_id_string = models.CharField(
+        'Caractères uniques du son',
+        max_length = 100)
+    audio_file = models.FileField(
+        'Fichier son',
+        upload_to = 'static/main/audio',
+        null = True,
+        blank = True)
+    created_date = models.DateField(
+        'A quelle date le rendre visible',
+        default = timezone.now)
+    posted_by = models.ForeignKey(
+        User, 
+        models.SET_NULL, 
+        blank = True, 
+        null = True,
+        related_name = 'son_author_for_be')
+    # Methods
+    def __str__(self):
+        return str(self.title)
