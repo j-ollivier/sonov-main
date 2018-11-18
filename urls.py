@@ -11,6 +11,4 @@ urlpatterns = [
     path('soundcloud_iframe/<str:soundcloud_id>', views.SoundcloudIframe),
     path('youtube_iframe/<str:youtube_id>', views.YoutubeIframe),
     path('vimeo_iframe/<str:vimeo_id>', views.VimeoIframe),
-    path('uploadforbe', views.UploadSonForBe, name='UploadSonForBe'),
-    path('playlistforbe', views.PlaylistForBe, name='Playlistforbe'),
 ]

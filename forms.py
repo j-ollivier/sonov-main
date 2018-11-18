@@ -7,8 +7,3 @@ class UploadSonForm(ModelForm):
         model = Son
         fields= ['title','source_site', 'source_url', 
         'thumbnail','tags', 'short_desc','posted_by']
-
-class UploadSonFormForBe(ModelForm):
-    class Meta:
-        model = Son
-        fields= [ 'title' , 'source_url' ]
