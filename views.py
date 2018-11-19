@@ -120,9 +120,15 @@ def UploadSon(request):
         Tool to upload a son and get the corresponding mp3
     '''
     if request.user.is_staff:
-        if request.method == 'GET':
+        if request.method == 'GET' and not request.user.username.startswith('BE_'):
             context = {
                 'upload_son_form': UploadSonForm(),
+            }
+            template = loader.get_template('main/upload_son.html')
+            return HttpResponse(template.render(context, request))
+        elif request.method == 'GET' and request.user.username.startswith('BE_'):
+            context = {
+                'upload_son_form': UploadSonFormForBe(),
             }
             template = loader.get_template('main/upload_son.html')
             return HttpResponse(template.render(context, request))
