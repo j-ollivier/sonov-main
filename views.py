@@ -73,6 +73,9 @@ def Playlist(request, tag_title):
             source_site = 'vimeo').order_by(
             '?')[:20]
         page_title = 'Shuffle 20 !'
+    elif request.user.username.startswith('BE_'):
+        playlist_content = Son.objects.filter(
+            posted_by = request.user)
     else:
         tag = Tag.objects.get(title = tag_title)
         playlist_content = Son.objects.filter(
