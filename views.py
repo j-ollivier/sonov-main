@@ -188,7 +188,7 @@ def UploadSon(request):
                 new_son.audio_file = 'static/main/audio/{}.mp3'.format(
                     new_son.source_id_string)
                 new_son.is_visible = False
-                new_son.created_date = datetime.datetime(2080, 01, 01, 01, 01)
+                new_son.created_date = datetime.datetime(2080, 1, 1, 1, 1)
                 new_son.short_desc = ''
                 new_son.posted_by = request.user
                 new_son.save()
