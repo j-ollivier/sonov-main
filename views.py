@@ -178,7 +178,54 @@ def UploadSon(request):
     else:
         return HttpResponseRedirect('/')
 
-
+#####################################################################
+def UploadVideo(request):
+    '''
+        Tool to upload a video and get the corresponding mp4
+    '''
+    if request.user.is_staff:
+        if request.method == 'GET':
+            context = {
+                'upload_video_form': UploadVideoForm(),
+            }
+            template = loader.get_template('main/upload_video.html')
+            return HttpResponse(template.render(context, request))
+        elif request.method == "POST":
+            form = UploadVideoForm(request.POST, request.FILES)
+            if form.is_valid():
+                new_video = Video()
+                new_video.source_id_string = form.cleaned_data['source_url']
+                # after the audio is DLd from the source site
+                # we rename the file as its source_id_string
+                new_video.video_file = 'static/main/audio/{}.mp4'.format(
+                new_video.source_id_string)
+                new_video.posted_by = form.cleaned_data['posted_by']
+                new_video.save()
+                else:
+                    return HttpResponseRedirect('/')
+                chdir('/home/common/sonov_django/static/main/video')
+                ydl_opts = {
+                    'outtmpl': '{}.mp4'.format(new_video.source_id_string),
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                    }],
+                }
+                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                        ydl.download([form.cleaned_data['source_url'],])
+                return HttpResponseRedirect('/')                        
+            else:
+                context = {
+                    'upload_video_form': UploadVideoForm(),
+                    'errors' : [i for i in form.errors],
+                    'player_enabled' : False,
+                    'colorbox_enabled' : False,
+                }
+                template = loader.get_template('main/upload_son.html')
+                return HttpResponse(template.render(context, request))
+        else:
+            return HttpResponseRedirect('/')
+    else:
+        return HttpResponseRedirect('/')
 #####################################################################
 def SoundcloudIframe(request, soundcloud_id):
     '''
