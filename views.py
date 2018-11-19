@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 import operator #for sorting objects from different tables in one aggregated list
-from .forms import UploadSonForm , UploadSonFormForBe
+from .forms import UploadSonForm , UploadVideoForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
