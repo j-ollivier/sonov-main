@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 import operator #for sorting objects from different tables in one aggregated list
-from .forms import UploadSonForm , UploadVideoForm
+from .forms import UploadSonForm , UploadSonFormForBe
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -12,7 +12,6 @@ import youtube_dl
 from os import chdir
 import re
 from .scripts import GetNextPostTime, GetYoutubeID
-import datetime
 
 #####################################################################
 def FrontPage(request):
@@ -74,9 +73,6 @@ def Playlist(request, tag_title):
             source_site = 'vimeo').order_by(
             '?')[:20]
         page_title = 'Shuffle 20 !'
-    elif request.user.username.startswith('BE_'):
-        playlist_content = Son.objects.filter(
-            posted_by = request.user)
     else:
         tag = Tag.objects.get(title = tag_title)
         playlist_content = Son.objects.filter(
@@ -120,19 +116,13 @@ def UploadSon(request):
         Tool to upload a son and get the corresponding mp3
     '''
     if request.user.is_staff:
-        if request.method == 'GET' and not request.user.username.startswith('BE_'):
+        if request.method == 'GET':
             context = {
                 'upload_son_form': UploadSonForm(),
             }
             template = loader.get_template('main/upload_son.html')
             return HttpResponse(template.render(context, request))
-        elif request.method == 'GET' and request.user.username.startswith('BE_'):
-            context = {
-                'upload_son_form': UploadSonFormForBe(),
-            }
-            template = loader.get_template('main/upload_son.html')
-            return HttpResponse(template.render(context, request))
-        elif request.method == "POST" and not request.user.username.startswith('BE_'):
+        elif request.method == "POST":
             form = UploadSonForm(request.POST, request.FILES)
             if form.is_valid():
                 new_son = Son()
@@ -173,49 +163,7 @@ def UploadSon(request):
                     son_to_dl = scdl.get_item(form.cleaned_data['source_url'])
                     os.chdir('/home/common/sonov_django/static/main/audio')
                     scdl.download_track(item)
-                return HttpResponseRedirect('/')
-        elif request.method == "POST" and request.user.username.startswith('BE_'):
-            form = UploadSonForm(request.POST, request.FILES)
-            if form.is_valid():
-                new_son = Son()
-                new_son.title = form.cleaned_data['title']
-                new_son.source_site = 'youtube'
-                new_son.thumbnail = 'https://www.sonov.fr/static/main/logo_snv2_64.png'
-                new_son.source_url = form.cleaned_data['source_url']
-                new_son.source_id_string = GetYoutubeID(form.cleaned_data['source_url'])
-                # after the audio is DLd from the source site
-                # we rename the file as its source_id_string
-                new_son.audio_file = 'static/main/audio/{}.mp3'.format(
-                    new_son.source_id_string)
-                new_son.is_visible = False
-                new_son.created_date = datetime.datetime(2080, 1, 1, 1, 1)
-                new_son.short_desc = ''
-                new_son.posted_by = request.user
-                new_son.save()
-                if form.cleaned_data['tags']:
-                    for tag in form.cleaned_data['tags']:
-                        new_son.tags.add(tag)
-                else:
-                    return HttpResponseRedirect('/')
-                # we DL the mp3
-                if new_son.source_site == "youtube":
-                    chdir('/home/common/sonov_django/static/main/audio')
-                    ydl_opts = {
-                        'outtmpl': '{}.mp3'.format(new_son.source_id_string),
-                        'format': 'bestaudio/best',
-                        'postprocessors': [{
-                            'key': 'FFmpegExtractAudio',
-                            'preferredcodec': 'mp3',
-                            'preferredquality': '320',
-                        }],
-                    }
-                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([form.cleaned_data['source_url'],])
-                elif new_son.source_site == "soundcloud":
-                    son_to_dl = scdl.get_item(form.cleaned_data['source_url'])
-                    os.chdir('/home/common/sonov_django/static/main/audio')
-                    scdl.download_track(item)
-                return HttpResponseRedirect('/')             
+                return HttpResponseRedirect('/')                        
             else:
                 context = {
                     'upload_son_form': UploadSonForm(),
@@ -230,54 +178,7 @@ def UploadSon(request):
     else:
         return HttpResponseRedirect('/')
 
-#####################################################################
-def UploadVideo(request):
-    '''
-        Tool to upload a video and get the corresponding mp4
-    '''
-    if request.user.is_staff:
-        if request.method == 'GET':
-            context = {
-                'upload_video_form': UploadVideoForm(),
-            }
-            template = loader.get_template('main/upload_video.html')
-            return HttpResponse(template.render(context, request))
-        elif request.method == "POST":
-            form = UploadVideoForm(request.POST, request.FILES)
-            if form.is_valid():
-                new_video = Video()
-                new_video.source_id_string = form.cleaned_data['source_url']
-                # after the audio is DLd from the source site
-                # we rename the file as its source_id_string
-                new_video.video_file = 'static/main/audio/{}.mp4'.format(
-                new_video.source_id_string)
-                new_video.posted_by = form.cleaned_data['posted_by']
-                new_video.save()
-                else:
-                    return HttpResponseRedirect('/')
-                chdir('/home/common/sonov_django/static/main/video')
-                ydl_opts = {
-                    'outtmpl': '{}.mp4'.format(new_video.source_id_string),
-                    'format': 'bestaudio/best',
-                    'postprocessors': [{
-                    }],
-                }
-                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([form.cleaned_data['source_url'],])
-                return HttpResponseRedirect('/')                        
-            else:
-                context = {
-                    'upload_video_form': UploadVideoForm(),
-                    'errors' : [i for i in form.errors],
-                    'player_enabled' : False,
-                    'colorbox_enabled' : False,
-                }
-                template = loader.get_template('main/upload_son.html')
-                return HttpResponse(template.render(context, request))
-        else:
-            return HttpResponseRedirect('/')
-    else:
-        return HttpResponseRedirect('/')
+
 #####################################################################
 def SoundcloudIframe(request, soundcloud_id):
     '''
