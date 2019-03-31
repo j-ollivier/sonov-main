@@ -84,6 +84,10 @@ class Tag(models.Model):
     '''
         Each Son has tags, which are used to compile playlists
     '''
+    category_choices = (
+        ( 1 , 'Style de musique' ) , 
+        ( 2 , 'Type de performance' ) , 
+        ( 3 , 'Ambiance') , )
     class Meta:
         ordering = ['title']
     uid = models.AutoField(
@@ -92,6 +96,8 @@ class Tag(models.Model):
     title = models.CharField(
         max_length = 100,
         unique = True)
+    category = models.PositiveIntegerField(
+        choices = category_choices )
     # Methods
     def __str__(self):
         return str(self.title)

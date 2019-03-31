@@ -3,6 +3,7 @@
 {% block content %}
 
 <h1 class="text-muted">Les derniers sons de Sonov</h1>
+<h4><a href="/playlist/timeline"><button type="button" class="btn btn-primary">Tout lire</button></a></h4>
 <div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
         
         {% if sons_to_display.has_previous %}
@@ -39,20 +40,41 @@
         </a>
         <div class="sidebar-heading text-muted">
 
-            {{son.created_date | date:'d M Y'}} par {{son.posted_by}}
+            {{son.created_date | date:'d M Y'}} par <a class="text-muted underlined_a" href="/playlist/{{son.posted_by}}">{{son.posted_by}}</a>
         </div>
         {% for tag in son.tags.all %}
         <a href="/playlist/{{tag.title}}">
-
-            <span class="tag">{{tag.title}}</span>
+            {% if tag.category == 2 %}
+            <span class="perf-tag tag">{{tag.title}}</span>
+            {% elif tag.category == 3 %}
+            <span class="mood-tag tag">{{tag.title}}</span>
+            {% else %}
+            <span class="son-tag tag">{{tag.title}}</span>
+            {% endif %}
 
         </a>
         {% endfor%}
-        {% if request.user.is_staff %}<a href="https://www.sonov.fr/admin/main/son/{{son.uid}}/change/"><span class="tag">admin</span></a>{% endif %}
+        {% if request.user.is_staff %}<a href="https://www.sonov.fr/admin/main/son/{{son.uid}}/change/"><span class="son-tag tag">admin</span></a>{% endif %}
         {% if not son.is_visible %}<div class="text-white">Invisible</div>{% endif %}
 
     </div>
     {% endfor %}
+
+</div>
+
+<div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
+        
+        {% if sons_to_display.has_previous %}
+        <a type="button"  class="btn btn-dark" href="?page={{ sons_to_display.previous_page_number }}"> < </span></a>
+        {% else %}
+        <span class="btn btn-dark disabled"> < </span>
+        {% endif %}
+        <span type="button" class="btn btn-dark">{{ sons_to_display.number }}/{{ sons_to_display.paginator.num_pages }}</span>
+        {% if sons_to_display.has_next %}
+        <a class="btn btn-dark" href="?page={{ sons_to_display.next_page_number }}"> > </a>
+        {% else %}
+        <span class="btn btn-dark disabled"> < </span></span>
+        {% endif %}
 
 </div>
 

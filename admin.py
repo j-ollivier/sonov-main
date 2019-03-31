@@ -7,6 +7,6 @@ class AdminSon(admin.ModelAdmin):
 admin.site.register(Son, AdminSon)
 
 class AdminTag(admin.ModelAdmin):
-    list_display =['uid','title']
+    list_display =['uid','title','category']
     ordering = ['uid']
 admin.site.register(Tag, AdminTag)

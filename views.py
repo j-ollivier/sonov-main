@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 import operator #for sorting objects from different tables in one aggregated list
-from .forms import UploadSonForm , UploadSonFormForBe
+from .forms import UploadSonForm 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -12,6 +12,13 @@ import youtube_dl
 from os import chdir
 import re
 from .scripts import GetNextPostTime, GetYoutubeID
+
+# 1er avril uniquement
+import random
+import time
+
+#####################################################################
+list_of_contributors = [ i.username for i in User.objects.filter( is_staff = True ) ]
 
 #####################################################################
 def FrontPage(request):
@@ -32,6 +39,12 @@ def FrontPage(request):
     paginator = Paginator(last_sons, 12)
     page = request.GET.get('page')
     sons_to_display = paginator.get_page(page)
+    # 1er avril
+    if time.strftime("%m") == "04" and time.strftime("%d") == "01" :
+        for son in sons_to_display:
+            if random.randint( 1,3 ) > 1:
+                son.source_id_string = 'eJuhX8LoH1s'
+                son.short_desc = 'Joyeux 1er Avril :^)'
     context={
         'all_tags': all_tags,
         'sons_to_display': sons_to_display,
@@ -47,13 +60,11 @@ def TagList(request):
         Landing page for the whole blog. It has a search form which
         looks up titles, tags, article texts.
     '''
-    all_tags = Tag.objects.all().order_by('title')
+    all_tags = Tag.objects.all().order_by('category' , 'title')
 
-    paginator = Paginator(all_tags, 12)
-    page = request.GET.get('page')
-    tags_to_display = paginator.get_page(page)
     context={
-        'tags_to_display': tags_to_display,
+        'categories' : Tag.category_choices,
+        'tags_to_display': all_tags,
         'player_enabled' : False,
         'colorbox_enabled' : True,
     }
@@ -69,15 +80,22 @@ def Playlist(request, tag_title):
     '''
     if tag_title == 'shuffle':
         playlist_content = Son.objects.filter(
-            is_visible = True).exclude(
-            source_site = 'vimeo').order_by(
+            is_visible = True).order_by(
             '?')[:20]
         page_title = 'Shuffle 20 !'
+    elif tag_title == 'timeline':
+        playlist_content = Son.objects.filter(
+            is_visible = True).order_by(
+            '-created_date')
+        page_title = 'La totale !'
+    elif tag_title in list_of_contributors:
+        page_title = 'Sons postés par {}'.format( tag_title )
+        playlist_content = Son.objects.filter(
+            posted_by__username = tag_title )
     else:
         tag = Tag.objects.get(title = tag_title)
         playlist_content = Son.objects.filter(
-            tags = tag, is_visible = True).exclude(
-            source_site = 'vimeo')
+            tags = tag, is_visible = True)
         page_title = tag.title
 
     context={
@@ -116,7 +134,7 @@ def UploadSon(request):
         Tool to upload a son and get the corresponding mp3
     '''
     if request.user.is_staff:
-        if request.method == 'GET':
+        if request.method == 'GET' and not request.user.username.startswith('BE_'):
             context = {
                 'upload_son_form': UploadSonForm(),
             }
@@ -145,24 +163,9 @@ def UploadSon(request):
                         new_son.tags.add(tag)
                 else:
                     return HttpResponseRedirect('/')
-                # we DL the mp3
-                if new_son.source_site == "youtube":
-                    chdir('/home/common/sonov_django/static/main/audio')
-                    ydl_opts = {
-                        'outtmpl': '{}.mp3'.format(new_son.source_id_string),
-                        'format': 'bestaudio/best',
-                        'postprocessors': [{
-                            'key': 'FFmpegExtractAudio',
-                            'preferredcodec': 'mp3',
-                            'preferredquality': '320',
-                        }],
-                    }
-                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([form.cleaned_data['source_url'],])
-                elif new_son.source_site == "soundcloud":
-                    son_to_dl = scdl.get_item(form.cleaned_data['source_url'])
-                    os.chdir('/home/common/sonov_django/static/main/audio')
-                    scdl.download_track(item)
+                # we put the mp3 in the DL list
+                with open( '/home/common/sonov_django/dl_list.txt' , 'a' ) as ofi:
+                    ofi.write( new_son.source_url )
                 return HttpResponseRedirect('/')                        
             else:
                 context = {
