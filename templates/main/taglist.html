@@ -5,6 +5,21 @@
 <h1 class="text-muted">Toutes les playlists</h1>
 <div class="row  d-flex justify-content-around mt-2">
     <div>
+        <h2 class="text-muted">Par contributeur</h1>
+        <div class="row d-flex justify-content-around mt-2">
+        {% for contr in contributor_category %}
+            <div class="m-3 section_item">
+                <a href="/playlist/{{contr.title}}" title="{{tag.short_desc}}">
+                    <div class="img-small-thumbnail-container">
+                        <img class="rounded-circle img-thumbnail box-shadow" src="{{contr.avatar}}">
+                        <h4 class="text-center text-white text-shadow pt-2"  style="max-width: 250px;">{{contr.name}}</h4>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
     {% for category in categories %}
         <div>
             <h2 class="text-muted">{{category.1}}</h1>
@@ -32,7 +47,6 @@
         </div>
     </div>
     {% endfor %}
-    <div>
 </div>
 
 {% endblock %}

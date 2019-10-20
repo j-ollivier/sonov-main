@@ -3,6 +3,7 @@ import time
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
+from forum.models import ForumMember
 import operator #for sorting objects from different tables in one aggregated list
 from .forms import UploadSonForm, SubscribeForm
 from django.shortcuts import render_to_response
@@ -55,12 +56,13 @@ def FrontPage(request):
 #####################################################################
 def TagList(request):
     '''
-        Landing page for the whole blog. It has a search form which
-        looks up titles, tags, article texts.
+        List of all tags and categories
     '''
     all_tags = Tag.objects.all().order_by('category' , 'title')
+    contributor_category = ForumMember.objects.filter( rank = 9999 )
 
     context={
+        'contributor_category' : contributor_category,
         'categories' : Tag.category_choices,
         'tags_to_display': all_tags,
         'player_enabled' : False,

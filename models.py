@@ -118,9 +118,18 @@ class Subscriber( models.Model ):
     uid = models.AutoField(
         primary_key = True,
         db_index = True)
+    name = models.CharField(
+        'Votre nom ou pseudonyme — facultatif',
+        null = True,
+        blank= True,
+        max_length = 50)
     email = models.CharField(
+        'Votre email',
         max_length = 100,
         unique = True)
+    forum_user = models.BooleanField(
+        'Voulez vous être aussi inscrit au forum ?',
+        default = False)
     created_date = models.DateField(
         'Date de création',
         default = timezone.now)

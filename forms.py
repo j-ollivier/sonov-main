@@ -11,4 +11,4 @@ class UploadSonForm(ModelForm):
 class SubscribeForm(ModelForm):
     class Meta:
         model = Subscriber
-        fields= ['email']
+        fields = ['email', 'forum_user', 'name' ]
