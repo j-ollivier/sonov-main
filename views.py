@@ -1,8 +1,10 @@
+
+import time 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 import operator #for sorting objects from different tables in one aggregated list
-from .forms import UploadSonForm 
+from .forms import UploadSonForm, SubscribeForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -12,10 +14,6 @@ import youtube_dl
 from os import chdir
 import re
 from .scripts import GetNextPostTime, GetYoutubeID
-
-# 1er avril uniquement
-import random
-import time
 
 #####################################################################
 list_of_contributors = [ i.username for i in User.objects.filter( is_staff = True ) ]
@@ -42,9 +40,9 @@ def FrontPage(request):
     # 1er avril
     if time.strftime("%m") == "04" and time.strftime("%d") == "01" :
         for son in sons_to_display:
-            if random.randint( 1,3 ) > 1:
+            if random.randint( 1,10 ) >= 7:
                 son.source_id_string = 'eJuhX8LoH1s'
-                son.short_desc = 'Joyeux 1er Avril :^)'
+                son.short_desc = '1er Avril :^) Recharge la page pour retenter le son'
     context={
         'all_tags': all_tags,
         'sons_to_display': sons_to_display,
@@ -178,6 +176,41 @@ def UploadSon(request):
                 return HttpResponse(template.render(context, request))
         else:
             return HttpResponseRedirect('/')
+    else:
+        return HttpResponseRedirect('/')
+
+#####################################################################
+def Subscribe( request ):
+    '''
+        Page to subscribe to the newsletter.
+    '''
+    if request.method == 'GET':
+        # protoype to limite spam
+        if Subscriber.objects.all().count() < 50:
+            subscribe_form = SubscribeForm()
+            sub_message = "Nous envoyons un petit mail toutes les \
+            semaines pour vous tenir au courant des sons qui ont été \
+            postés, ainsi que les nouvelles du site. "
+        else:
+            subscribe_form = None
+            sub_message = "Notre boîte d'envoi de newsletter est \
+            arrivé à capacité maximale ! Revenez bientôt pour \
+            vous inscrire :) désolé pour le contretemps."
+        context = {
+            'subscribe_form': subscribe_form,
+            'sub_message' : sub_message,
+        }
+        template = loader.get_template('main/subscribe.html')
+        return HttpResponse(template.render(context, request))
+    elif request.method == "POST":
+        form = SubscribeForm( request.POST )
+        if form.is_valid():
+            new_subscriber = Subscriber()
+            new_subscriber.email = form.cleaned_data[ 'email' ]
+            new_subscriber.save()          
+        template = loader.get_template('main/subscribe_ok.html')
+        context={}
+        return HttpResponse(template.render(context, request))   
     else:
         return HttpResponseRedirect('/')
 

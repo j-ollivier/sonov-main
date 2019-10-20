@@ -7,3 +7,8 @@ class UploadSonForm(ModelForm):
         model = Son
         fields= ['title','source_site', 'source_url', 
         'thumbnail','tags', 'short_desc','posted_by']
+
+class SubscribeForm(ModelForm):
+    class Meta:
+        model = Subscriber
+        fields= ['email']

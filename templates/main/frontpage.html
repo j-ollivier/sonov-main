@@ -42,18 +42,20 @@
 
             {{son.created_date | date:'d M Y'}} par <a class="text-muted underlined_a" href="/playlist/{{son.posted_by}}">{{son.posted_by}}</a>
         </div>
-        {% for tag in son.tags.all %}
-        <a href="/playlist/{{tag.title}}">
-            {% if tag.category == 2 %}
-            <span class="perf-tag tag">{{tag.title}}</span>
-            {% elif tag.category == 3 %}
-            <span class="mood-tag tag">{{tag.title}}</span>
-            {% else %}
-            <span class="son-tag tag">{{tag.title}}</span>
-            {% endif %}
+        <div class="flex justify-content-center flex-wrap" style="max-width: 250px;">
+            {% for tag in son.tags.all %}
+            <a href="/playlist/{{tag.title}}">
+                {% if tag.category == 2 %}
+                <span class="perf-tag tag">{{tag.title}}</span>
+                {% elif tag.category == 3 %}
+                <span class="mood-tag tag">{{tag.title}}</span>
+                {% else %}
+                <span class="son-tag tag">{{tag.title}}</span>
+                {% endif %}
 
-        </a>
-        {% endfor%}
+            </a>
+            {% endfor%}
+        </div>
         {% if request.user.is_staff %}<a href="https://www.sonov.fr/admin/main/son/{{son.uid}}/change/"><span class="son-tag tag">admin</span></a>{% endif %}
         {% if not son.is_visible %}<div class="text-white">Invisible</div>{% endif %}
 

@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<h1 style="color:white;">Merci !</h1>
+<div class="container-fluid col-md-8 w_bg">
+    <style>
+        input,select{
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+        }
+        .w_bg{
+          background-image: url('/static/forum/seamless.png');
+          border-radius: 4px;
+          border: solid 1px #ccc;
+          padding: 1rem;
+        }
+    </style>
+    <p>
+        Votre inscription à la newsletter est bien prise en compte. Si jamais vous voulez vous désinscrire, il suffira de répondre à l'un de nos mails pour dire stop. Je ne garde pas les adresse e-mail après désinscription, ça ne me sert à rien :)
+    </p>
+    <h2><a style="color: black;" href="/">Retourner à l'accueil</a></h2>
+
+</div>
+
+{% endblock %}

@@ -4,7 +4,7 @@ from django.utils import timezone
 import random
 
 #####################################################################
-class Son(models.Model):
+class Son( models.Model ):
     '''
         Defines the informations about a video displayed on the site.
     '''
@@ -80,7 +80,7 @@ class Son(models.Model):
         
 
 #####################################################################
-class Tag(models.Model):
+class Tag( models.Model ):
     '''
         Each Son has tags, which are used to compile playlists
     '''
@@ -108,3 +108,21 @@ class Tag(models.Model):
     def random_son(self):
         random_son = Son.objects.filter(tags = self).order_by('?').first()
         return random_son
+
+
+#####################################################################
+class Subscriber( models.Model ):
+    """
+        To collect email addresses for the newsletter
+    """
+    uid = models.AutoField(
+        primary_key = True,
+        db_index = True)
+    email = models.CharField(
+        max_length = 100,
+        unique = True)
+    created_date = models.DateField(
+        'Date de création',
+        default = timezone.now)
+    modified_date = models.DateTimeField(
+        auto_now = True)

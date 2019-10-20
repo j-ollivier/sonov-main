@@ -7,12 +7,6 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample07">
             <ul class="navbar-nav d-flex justify-content-around">
-                <li class="nav-item">
-
-                    <a class="nav-link" href="/"><h4>Sons</h4></a>
-
-                </li>
-                <li class="nav-item">
                     
                     <a class="nav-link" href="/tags"><h4>Playlists</h4></a>
                     
@@ -27,15 +21,20 @@
                     <a class="nav-link" href="/clips"><h4>Clips</h4></a>
                     
                 </li>
+                <li class="nav-item">
+                    
+                    <a class="nav-link" href="/forum"><h4>Forum</h4></a>
+                    
+                </li>
+                <li class="nav-item">
+
+                    <a class="nav-link" href="/subscribe"><img src="/static/main/css/mail.png"></a>
+
+                </li>
                 {% if request.user.is_staff %}
                 <li class="nav-item">
                     
                     <a class="nav-link" href="/upload"><h4>Upload</h4></a>
-                    
-                </li>
-                <li class="nav-item">
-                    
-                    <a class="nav-link" href="/forum"><h4>Forum</h4></a>
                     
                 </li>
                 <li class="nav-item">

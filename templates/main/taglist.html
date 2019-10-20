@@ -3,21 +3,6 @@
 {% block content %}
 
 <h1 class="text-muted">Toutes les playlists</h1>
-<!-- <div class="pagination btn-group justify-content-center" role="group" aria-label="Pagination">
-
-        {% if tags_to_display.has_previous %}
-        <a type="button"  class="btn btn-dark" href="?page={{ tags_to_display.previous_page_number }}"><span data-feather="chevrons-left"></span></a>
-        {% else %}
-        <span class="btn btn-dark disabled"><span data-feather="chevrons-left"></span></span>
-        {% endif %}
-        <span type="button" class="btn btn-dark">{{ tags_to_display.number }}/{{ tags_to_display.paginator.num_pages }}</span>
-        {% if tags_to_display.has_next %}
-        <a class="btn btn-dark" href="?page={{ tags_to_display.next_page_number }}"><span data-feather="chevrons-right"></span></a>
-        {% else %}
-        <span class="btn btn-dark disabled"><span data-feather="chevrons-right"></span></span>
-        {% endif %}
-
-</div> -->
 <div class="row  d-flex justify-content-around mt-2">
     <div>
     {% for category in categories %}
@@ -33,7 +18,7 @@
 
                         <div class="img-small-thumbnail-container">
 
-                            <!-- <img class="rounded-circle img-thumbnail box-shadow" src="{{tag.random_son.thumbnail}}"> -->
+                            <img class="rounded-circle img-thumbnail box-shadow" src="{{tag.random_son.thumbnail}}">
                             <h4 class="text-center text-white text-shadow pt-2"  style="max-width: 250px;">{{tag.title}}</h4>
                             <span class="text-white">{{tag.tag_son_count}} sons</span>
                         

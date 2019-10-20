@@ -10,3 +10,8 @@ class AdminTag(admin.ModelAdmin):
     list_display =['uid','title','category']
     ordering = ['uid']
 admin.site.register(Tag, AdminTag)
+
+class AdminSubscriber(admin.ModelAdmin):
+    list_display =['uid','email','created_date']
+    ordering = ['uid']
+admin.site.register(Subscriber, AdminSubscriber)
